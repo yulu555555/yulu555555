@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Reminder</title>
+    <style>
+        .birthday-bg {
+            background-image: url('flower.jpg'); /* 生日背景图片路径 */
+            /* 添加其他样式以适应背景图片 */
+        }
+    </style>
+</head>
+<body>
+    <div id="app" :class="{ 'birthday-bg': isBirthday }">
+        <div v-if="!isBirthday">
+            <p>Your Age: {{ age }}</p>
+            <p>Days until next birthday: {{ daysUntilBirthday }}</p>
+        </div>
+        <div v-else>
+            <p>Happy Birthday!</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                birthday: '2001-03-31', // 修改为你的生日
+                isBirthday: false,
+                age: '',
+                daysUntilBirthday: ''
+            },
+            created() {
+                this.checkBirthday();
+            },
+            methods: {
+                checkBirthday() {
+                    const today = new Date();
+                    const birthDate = new Date(this.birthday);
+                    const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+
+                    if (nextBirthday < today) {
+                        nextBirthday.setFullYear(today.getFullYear() + 1);
+                    }
+
+                    const diffTime = Math.abs(nextBirthday - today);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    this.isBirthday = birthDate.getMonth() === today.getMonth() && birthDate.getDate() === today.getDate();
+                    this.age = this.calculateAge(birthDate);
+                    this.daysUntilBirthday = this.isBirthday ? 'Today!' : diffDays + ' days';
+                },
+                calculateAge(birthDate) {
+                    const today = new Date();
+                    const diff = today - birthDate;
+                    const ageDate = new Date(diff);
+                    return Math.abs(ageDate.getUTCFullYear() - 1970);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
