@@ -1,0 +1,88 @@
+<template>
+  <div>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const AgeComponent = {
+  template: `
+    <div>
+      <h1>{{ person }}的年龄：{{ age }}</h1>
+      <h2>距离下一次生日还有：{{ nextBirthday }}</h2>
+    </div>
+  `,
+  data() {
+    return {
+      person: 'xxx',
+      birthday: new Date('YYYY-MM-DD'), // 设置生日日期
+    }
+  },
+  computed: {
+    age() {
+      // 计算年龄
+      return this.calculateAge(this.birthday)
+    },
+    nextBirthday() {
+      // 计算距离下一次生日的时间
+      return this.calculateTimeToNextBirthday(this.birthday)
+    }
+  },
+  methods: {
+    calculateAge(birthday) {
+      // 计算年龄逻辑
+    },
+    calculateTimeToNextBirthday(birthday) {
+      // 计算距离下一次生日的时间逻辑
+    }
+  }
+}
+
+const BirthdayComponent = {
+  template: `
+    <div>
+      <h1>生日快乐！</h1>
+      <!-- 分六个区域 -->
+      <div @click="gotoPage(1)">图1</div>
+      <div @click="gotoPage(2)">图2</div>
+      <div @click="gotoPage(3)">图3</div>
+      <div @click="gotoPage(4)">图4</div>
+      <div @click="gotoPage(5)">图5</div>
+      <div @click="gotoPage(6)">图6</div>
+    </div>
+  `,
+  methods: {
+    gotoPage(pageNumber) {
+      // 跳转到不同的界面
+      this.$router.push(`/page${pageNumber}`)
+    }
+  }
+}
+
+const BlessingComponent = {
+  template: `
+    <div>
+      <h1>生日祝福</h1>
+      <!-- 展示生日祝福文字 -->
+    </div>
+  `
+}
+
+const router = new VueRouter({
+  routes: [
+    { path: '/page1', component: AgeComponent },
+    { path: '/page2', component: BirthdayComponent },
+    { path: '/page3', component: BlessingComponent }
+    // 可以继续添加其他页面的路由
+  ]
+})
+
+export default {
+  router
+}
+</script>
